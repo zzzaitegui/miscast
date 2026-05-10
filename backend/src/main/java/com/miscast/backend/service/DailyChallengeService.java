@@ -39,7 +39,24 @@ public class DailyChallengeService {
         Film film = films.get(rng.nextInt(films.size()));
 
         double base = film.getTmdbRating() != null ? film.getTmdbRating() : 6.5;
-        double offset = (rng.nextDouble() * 3.0) - 1.5; // [-1.5, +1.5]
+
+        // Asymmetric ranges: high-rated films can fall far but barely rise; low-rated films reversed
+        double upMax, downMax;
+        if (base >= 7.5) {
+            upMax = 2.0;
+            downMax = 6.0;
+        } else if (base < 4.5) {
+            upMax = 6.0;
+            downMax = 2.0;
+        } else {
+            upMax = 4.0;
+            downMax = 4.0;
+        }
+
+        boolean goUp = rng.nextBoolean();
+        double max = goUp ? upMax : downMax;
+        double magnitude = 1.5 + rng.nextDouble() * (max - 1.5);
+        double offset = goUp ? magnitude : -magnitude;
         double target = Math.round(Math.max(1.0, Math.min(10.0, base + offset)) * 10.0) / 10.0;
 
         DailyChallenge challenge = new DailyChallenge();
