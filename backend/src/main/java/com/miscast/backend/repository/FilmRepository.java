@@ -14,4 +14,6 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
     Optional<Film> findByIdWithAll(@Param("id") Long id);
 
     List<Film> findByTitleContainingIgnoreCaseOrderByTitle(String title);
+
+    long countByAdjustedRatingIsNull();
 }

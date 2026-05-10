@@ -38,7 +38,8 @@ public class DailyChallengeService {
         Random rng = new Random(date.toEpochDay());
         Film film = films.get(rng.nextInt(films.size()));
 
-        double base = film.getTmdbRating() != null ? film.getTmdbRating() : 6.5;
+        double base = film.getAdjustedRating() != null ? film.getAdjustedRating()
+            : (film.getTmdbRating() != null ? film.getTmdbRating() : 6.5);
 
         // Asymmetric ranges: high-rated films can fall far but barely rise; low-rated films reversed
         double upMax, downMax;
@@ -53,7 +54,11 @@ public class DailyChallengeService {
             downMax = 4.0;
         }
 
-        boolean goUp = rng.nextBoolean();
+        // Alternate direction by day parity (even = improve, odd = worsen) for long-term balance,
+        // with a 15% chance of flipping to avoid being perfectly predictable
+        boolean defaultGoUp = (date.toEpochDay() % 2 == 0);
+        boolean goUp = (rng.nextDouble() < 0.15) ? !defaultGoUp : defaultGoUp;
+
         double max = goUp ? upMax : downMax;
         double magnitude = 1.5 + rng.nextDouble() * (max - 1.5);
         double offset = goUp ? magnitude : -magnitude;

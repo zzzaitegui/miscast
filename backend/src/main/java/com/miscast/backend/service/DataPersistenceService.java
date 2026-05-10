@@ -27,6 +27,8 @@ public class DataPersistenceService {
     private PersonRepository personRepository;
     @Autowired
     private FilmPersonRepository filmPersonRepository;
+    @Autowired
+    private RatingTransformService transformService;
 
     @Transactional
     public void saveGenres(Collection<Genre> genres) {
@@ -41,6 +43,9 @@ public class DataPersistenceService {
             film.setTitle(fd.title());
             film.setYear(fd.year());
             film.setTmdbRating(fd.voteAverage());
+            if (fd.voteAverage() != null) {
+                film.setAdjustedRating(transformService.transform(fd.voteAverage()));
+            }
             film.setVoteCount(fd.voteCount());
             film.setPosterPath(fd.posterPath());
             film.setOverview(fd.overview());

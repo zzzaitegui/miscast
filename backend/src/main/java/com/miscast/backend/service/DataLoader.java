@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@Order(1)
 public class DataLoader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
@@ -33,6 +35,7 @@ public class DataLoader implements CommandLineRunner {
     @Autowired private FilmRepository filmRepository;
     @Autowired private TmdbService tmdbService;
     @Autowired private DataPersistenceService persistenceService;
+    @Autowired private RatingTransformService transformService;
 
     // Shared data record types used also by DataPersistenceService
     public record FilmData(Long id, String title, int year, Double voteAverage, Integer voteCount,
@@ -200,14 +203,13 @@ public class DataLoader implements CommandLineRunner {
             person.setActorCreditCount(actorCredits.size());
             if (actorCredits.size() >= MIN_CREDITS) {
                 person.setActorRating(bayesian(
-                    actorCredits.values().stream().mapToDouble(c -> c.voteAverage() * c.voteCount()).sum(),
+                    actorCredits.values().stream().mapToDouble(c -> transformService.transform(c.voteAverage()) * c.voteCount()).sum(),
                     actorCredits.values().stream().mapToLong(TmdbService.PersonCreditCast::voteCount).sum()
                 ));
             }
         }
 
         if (credits.crew() != null) {
-            // Director
             Map<Long, TmdbService.PersonCreditCrew> directorCredits = new LinkedHashMap<>();
             Map<Long, TmdbService.PersonCreditCrew> writerCredits = new LinkedHashMap<>();
             Map<Long, TmdbService.PersonCreditCrew> dopCredits = new LinkedHashMap<>();
@@ -224,7 +226,7 @@ public class DataLoader implements CommandLineRunner {
             person.setDirectorCreditCount(directorCredits.size());
             if (directorCredits.size() >= MIN_CREDITS) {
                 person.setDirectorRating(bayesian(
-                    directorCredits.values().stream().mapToDouble(c -> c.voteAverage() * c.voteCount()).sum(),
+                    directorCredits.values().stream().mapToDouble(c -> transformService.transform(c.voteAverage()) * c.voteCount()).sum(),
                     directorCredits.values().stream().mapToLong(TmdbService.PersonCreditCrew::voteCount).sum()
                 ));
             }
@@ -232,7 +234,7 @@ public class DataLoader implements CommandLineRunner {
             person.setWriterCreditCount(writerCredits.size());
             if (writerCredits.size() >= MIN_CREDITS) {
                 person.setWriterRating(bayesian(
-                    writerCredits.values().stream().mapToDouble(c -> c.voteAverage() * c.voteCount()).sum(),
+                    writerCredits.values().stream().mapToDouble(c -> transformService.transform(c.voteAverage()) * c.voteCount()).sum(),
                     writerCredits.values().stream().mapToLong(TmdbService.PersonCreditCrew::voteCount).sum()
                 ));
             }
@@ -240,7 +242,7 @@ public class DataLoader implements CommandLineRunner {
             person.setDopCreditCount(dopCredits.size());
             if (dopCredits.size() >= MIN_CREDITS) {
                 person.setDopRating(bayesian(
-                    dopCredits.values().stream().mapToDouble(c -> c.voteAverage() * c.voteCount()).sum(),
+                    dopCredits.values().stream().mapToDouble(c -> transformService.transform(c.voteAverage()) * c.voteCount()).sum(),
                     dopCredits.values().stream().mapToLong(TmdbService.PersonCreditCrew::voteCount).sum()
                 ));
             }
@@ -248,7 +250,7 @@ public class DataLoader implements CommandLineRunner {
             person.setComposerCreditCount(composerCredits.size());
             if (composerCredits.size() >= MIN_CREDITS) {
                 person.setComposerRating(bayesian(
-                    composerCredits.values().stream().mapToDouble(c -> c.voteAverage() * c.voteCount()).sum(),
+                    composerCredits.values().stream().mapToDouble(c -> transformService.transform(c.voteAverage()) * c.voteCount()).sum(),
                     composerCredits.values().stream().mapToLong(TmdbService.PersonCreditCrew::voteCount).sum()
                 ));
             }

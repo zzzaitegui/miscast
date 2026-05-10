@@ -44,7 +44,7 @@ public class FilmController {
     }
 
     private FilmSummaryDto toSummary(Film f) {
-        return new FilmSummaryDto(f.getId(), f.getTitle(), f.getYear(), f.getPosterPath(), f.getTmdbRating());
+        return new FilmSummaryDto(f.getId(), f.getTitle(), f.getYear(), f.getPosterPath(), f.getTmdbRating(), f.getAdjustedRating());
     }
 
     private FilmDetailDto toDetail(Film f) {
@@ -56,7 +56,7 @@ public class FilmController {
             .toList();
         return new FilmDetailDto(
             f.getId(), f.getTitle(), f.getYear(),
-            f.getTmdbRating(), f.getVoteCount(),
+            f.getTmdbRating(), f.getAdjustedRating(), f.getVoteCount(),
             f.getPosterPath(), f.getOverview(),
             genres, filmPersons
         );

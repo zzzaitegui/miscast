@@ -7,6 +7,7 @@ public record FilmDetailDto(
     String title,
     int year,
     Double tmdbRating,
+    Double adjustedRating,
     Integer voteCount,
     String posterPath,
     String overview,

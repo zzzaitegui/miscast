@@ -17,6 +17,7 @@ public class Film {
 
     private int year;
     private Double tmdbRating;
+    private Double adjustedRating;
     private Integer voteCount;
     private String posterPath;
 
@@ -45,6 +46,8 @@ public class Film {
     public void setYear(int year) { this.year = year; }
     public Double getTmdbRating() { return tmdbRating; }
     public void setTmdbRating(Double tmdbRating) { this.tmdbRating = tmdbRating; }
+    public Double getAdjustedRating() { return adjustedRating; }
+    public void setAdjustedRating(Double adjustedRating) { this.adjustedRating = adjustedRating; }
     public Integer getVoteCount() { return voteCount; }
     public void setVoteCount(Integer voteCount) { this.voteCount = voteCount; }
     public String getPosterPath() { return posterPath; }
