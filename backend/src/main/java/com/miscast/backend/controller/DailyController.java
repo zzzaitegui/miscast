@@ -25,7 +25,7 @@ public class DailyController {
             Film film = challenge.getFilm();
             FilmSummaryDto filmSummary = new FilmSummaryDto(
                 film.getId(), film.getTitle(), film.getYear(),
-                film.getPosterPath(), film.getTmdbRating()
+                film.getPosterPath(), film.getTmdbRating(), film.getAdjustedRating()
             );
             return ResponseEntity.ok(new DailyDto(film.getId(), challenge.getTargetRating(), filmSummary));
         } catch (IllegalStateException e) {
