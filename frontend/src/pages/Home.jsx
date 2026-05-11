@@ -15,12 +15,11 @@ function CalendarIcon() {
 }
 
 const COLOR_STOPS = [
-  { r: 0,   rgb: [176, 0,   32]  },  // #B00020 deep red
-  { r: 4,   rgb: [220, 80,  0]   },  // orange
-  { r: 6,   rgb: [255, 185, 0]   },  // amber
-  { r: 7.5, rgb: [140, 200, 45]  },  // yellow-green
-  { r: 9,   rgb: [30,  185, 92]  },  // #1EB95C green
-  { r: 10,  rgb: [30,  185, 92]  },
+  { r: 0,   rgb: [176, 0,   32]  },  // #B00020 — red
+  { r: 2.5, rgb: [220, 80,  0]   },  // orange
+  { r: 5,   rgb: [255, 185, 0]   },  // amber
+  { r: 7.5, rgb: [30,  185, 92]  },  // #1EB95C — green
+  { r: 10,  rgb: [28,  104, 204] },  // #1C68CC — blue
 ]
 
 function getRatingColor(rating) {
