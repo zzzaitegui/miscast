@@ -3,7 +3,9 @@ package com.miscast.backend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "films")
@@ -30,7 +32,7 @@ public class Film {
         joinColumns = @JoinColumn(name = "film_id"),
         inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private List<Genre> genres = new ArrayList<>();
+    private Set<Genre> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -54,8 +56,8 @@ public class Film {
     public void setPosterPath(String posterPath) { this.posterPath = posterPath; }
     public String getOverview() { return overview; }
     public void setOverview(String overview) { this.overview = overview; }
-    public List<Genre> getGenres() { return genres; }
-    public void setGenres(List<Genre> genres) { this.genres = genres; }
+    public Set<Genre> getGenres() { return genres; }
+    public void setGenres(Set<Genre> genres) { this.genres = genres; }
     public List<FilmPerson> getFilmPersons() { return filmPersons; }
     public void setFilmPersons(List<FilmPerson> filmPersons) { this.filmPersons = filmPersons; }
 }

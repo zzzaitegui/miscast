@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface FilmRepository extends JpaRepository<Film, Long> {
 
-    @Query("SELECT DISTINCT f FROM Film f LEFT JOIN FETCH f.genres LEFT JOIN FETCH f.filmPersons fp LEFT JOIN FETCH fp.person WHERE f.id = :id")
+    @Query("SELECT DISTINCT f FROM Film f LEFT JOIN FETCH f.filmPersons fp LEFT JOIN FETCH fp.person WHERE f.id = :id")
     Optional<Film> findByIdWithAll(@Param("id") Long id);
 
     List<Film> findByTitleContainingIgnoreCaseOrderByTitle(String title);

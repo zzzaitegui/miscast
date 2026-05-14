@@ -63,8 +63,10 @@ public class MatchController {
     }
 
     private MatchResponse toResponse(Match m) {
+        Film f = m.getFilm();
+        Double baseRating = f.getAdjustedRating() != null ? f.getAdjustedRating() : f.getTmdbRating();
         return new MatchResponse(
-            m.getId(), m.getFilm().getId(), m.getFilm().getTitle(),
+            m.getId(), f.getId(), f.getTitle(), f.getYear(), baseRating,
             m.getTargetRating(), m.getFinalRating(),
             m.getSwapsUsed(), m.isWon(),
             m.getCompletedAt(), m.getMode()
