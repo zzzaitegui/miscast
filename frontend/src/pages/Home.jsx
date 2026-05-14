@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDaily } from '../services/api'
+import { getRatingColor } from '../utils/ratingColor'
 import './Home.css'
 
 function CalendarIcon() {
@@ -12,29 +13,6 @@ function CalendarIcon() {
       <line x1="16" y1="2" x2="16" y2="6" />
     </svg>
   )
-}
-
-const COLOR_STOPS = [
-  { r: 0,   rgb: [176, 0,   32]  },  // #B00020 — red
-  { r: 2.5, rgb: [220, 80,  0]   },  // orange
-  { r: 5,   rgb: [255, 185, 0]   },  // amber
-  { r: 7.5, rgb: [30,  185, 92]  },  // #1EB95C — green
-  { r: 10,  rgb: [28,  104, 204] },  // #1C68CC — blue
-]
-
-function getRatingColor(rating) {
-  const v = Math.max(0, Math.min(10, rating))
-  for (let i = 0; i < COLOR_STOPS.length - 1; i++) {
-    const lo = COLOR_STOPS[i], hi = COLOR_STOPS[i + 1]
-    if (v <= hi.r) {
-      const t = (v - lo.r) / (hi.r - lo.r)
-      const r = Math.round(lo.rgb[0] + (hi.rgb[0] - lo.rgb[0]) * t)
-      const g = Math.round(lo.rgb[1] + (hi.rgb[1] - lo.rgb[1]) * t)
-      const b = Math.round(lo.rgb[2] + (hi.rgb[2] - lo.rgb[2]) * t)
-      return `rgb(${r}, ${g}, ${b})`
-    }
-  }
-  return `rgb(${COLOR_STOPS.at(-1).rgb.join(',')})`
 }
 
 function RatingCircle({ value, label }) {
@@ -61,8 +39,8 @@ export default function Home() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="home-state">Cargando...</div>
-  if (!daily) return <div className="home-state">No se pudo cargar el reto diario.</div>
+  if (loading) return <div className="home-state">Loading...</div>
+  if (!daily) return <div className="home-state">Could not load daily challenge.</div>
 
   const { film, targetRating } = daily
   const posterUrl = film.posterPath ? `https://image.tmdb.org/t/p/w500${film.posterPath}` : null
