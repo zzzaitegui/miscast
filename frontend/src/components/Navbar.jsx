@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
 
@@ -14,6 +14,8 @@ function PersonIcon() {
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const isStudioActive = location.pathname.startsWith('/studio')
 
   function handleProfileClick() {
     if (isAuthenticated) {
@@ -33,6 +35,9 @@ export default function Navbar() {
         </NavLink>
         <NavLink to="/search" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
           custom
+        </NavLink>
+        <NavLink to="/studio" className={() => 'nav-link' + (isStudioActive ? ' active' : '')}>
+          studio
         </NavLink>
         <NavLink to="/history" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
           history

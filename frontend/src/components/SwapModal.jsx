@@ -24,7 +24,7 @@ function CloseIcon() {
   )
 }
 
-export default function SwapModal({ role, currentPerson, onSwap, onClose, occupiedPersonIds = new Set() }) {
+export default function SwapModal({ role, currentPerson, onSwap, onClose, occupiedPersonIds = new Set(), studioMode = false }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [searching, setSearching] = useState(false)
@@ -56,7 +56,7 @@ export default function SwapModal({ role, currentPerson, onSwap, onClose, occupi
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const currentPhotoUrl = currentPerson.profilePath
+  const currentPhotoUrl = (!studioMode && currentPerson?.profilePath)
     ? `https://image.tmdb.org/t/p/w185${currentPerson.profilePath}`
     : null
 
@@ -66,14 +66,18 @@ export default function SwapModal({ role, currentPerson, onSwap, onClose, occupi
 
         <div className="modal-header">
           <div className="modal-header-left">
-            <span className="modal-role-label">Swapping {ROLE_LABELS[role]}</span>
-            <div className="modal-current-person">
-              {currentPhotoUrl
-                ? <img src={currentPhotoUrl} alt={currentPerson.name} className="modal-current-photo" />
-                : <div className="modal-current-photo modal-photo-placeholder" />
-              }
-              <span className="modal-current-name">{currentPerson.name}</span>
-            </div>
+            <span className="modal-role-label">
+              {studioMode ? `Add ${ROLE_LABELS[role]}` : `Swapping ${ROLE_LABELS[role]}`}
+            </span>
+            {!studioMode && (
+              <div className="modal-current-person">
+                {currentPhotoUrl
+                  ? <img src={currentPhotoUrl} alt={currentPerson?.name} className="modal-current-photo" />
+                  : <div className="modal-current-photo modal-photo-placeholder" />
+                }
+                <span className="modal-current-name">{currentPerson?.name}</span>
+              </div>
+            )}
           </div>
           <button className="modal-close-btn" onClick={onClose}>
             <CloseIcon />

@@ -7,6 +7,8 @@ import Leaderboard from './pages/Leaderboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import History from './pages/History'
+import Studio from './pages/Studio'
+import StudioGame from './pages/StudioGame'
 import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
 
@@ -20,6 +22,8 @@ export default function App() {
           <Route path="/game/:filmId" element={<Game />} />
           <Route path="/daily" element={<DailyRedirect />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/studio" element={<Studio />} />
+          <Route path="/studio/play" element={<StudioGame />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
