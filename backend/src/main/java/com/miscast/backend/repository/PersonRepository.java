@@ -28,6 +28,9 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p WHERE (:name = '' OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND p.composerRating IS NOT NULL ORDER BY p.composerRating DESC")
     List<Person> searchByNameAndComposerRating(@Param("name") String name, Pageable pageable);
 
+    List<Person> findByMainRoleRatingIsNotNull();
+    long countByMainRoleIsNull();
+
     List<Person> findTop100ByActorRatingIsNotNullOrderByActorRatingDesc();
     List<Person> findTop100ByDirectorRatingIsNotNullOrderByDirectorRatingDesc();
     List<Person> findTop100ByWriterRatingIsNotNullOrderByWriterRatingDesc();

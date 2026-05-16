@@ -16,6 +16,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const isStudioActive = location.pathname.startsWith('/studio')
+  const isFaceoffActive = location.pathname.startsWith('/faceoff')
 
   function handleProfileClick() {
     if (isAuthenticated) {
@@ -38,6 +39,9 @@ export default function Navbar() {
         </NavLink>
         <NavLink to="/studio" className={() => 'nav-link' + (isStudioActive ? ' active' : '')}>
           studio
+        </NavLink>
+        <NavLink to="/faceoff" className={() => 'nav-link' + (isFaceoffActive ? ' active' : '')}>
+          faceoff
         </NavLink>
         <NavLink to="/history" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
           history

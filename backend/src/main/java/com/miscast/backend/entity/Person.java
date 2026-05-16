@@ -33,6 +33,9 @@ public class Person {
     @Column(nullable = false)
     private int composerCreditCount = 0;
 
+    private String mainRole;
+    private Double mainRoleRating;
+
     @OneToMany(mappedBy = "person")
     @JsonIgnore
     private List<FilmPerson> filmPersons;
@@ -65,6 +68,10 @@ public class Person {
     public void setDopCreditCount(int dopCreditCount) { this.dopCreditCount = dopCreditCount; }
     public int getComposerCreditCount() { return composerCreditCount; }
     public void setComposerCreditCount(int composerCreditCount) { this.composerCreditCount = composerCreditCount; }
+    public String getMainRole() { return mainRole; }
+    public void setMainRole(String mainRole) { this.mainRole = mainRole; }
+    public Double getMainRoleRating() { return mainRoleRating; }
+    public void setMainRoleRating(Double mainRoleRating) { this.mainRoleRating = mainRoleRating; }
     public List<FilmPerson> getFilmPersons() { return filmPersons; }
     public void setFilmPersons(List<FilmPerson> filmPersons) { this.filmPersons = filmPersons; }
 }
