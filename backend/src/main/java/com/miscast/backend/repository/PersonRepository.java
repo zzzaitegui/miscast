@@ -33,4 +33,34 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findTop100ByWriterRatingIsNotNullOrderByWriterRatingDesc();
     List<Person> findTop100ByDopRatingIsNotNullOrderByDopRatingDesc();
     List<Person> findTop100ByComposerRatingIsNotNullOrderByComposerRatingDesc();
+
+    @Query("SELECT p FROM Person p WHERE p.actorRating IS NOT NULL " +
+           "AND (:minYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'actor' AND fp.film.year >= :minYear)) " +
+           "AND (:maxYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'actor' AND fp.film.year <= :maxYear)) " +
+           "ORDER BY p.actorRating DESC")
+    List<Person> findActorsInYearRange(@Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, Pageable pageable);
+
+    @Query("SELECT p FROM Person p WHERE p.directorRating IS NOT NULL " +
+           "AND (:minYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'director' AND fp.film.year >= :minYear)) " +
+           "AND (:maxYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'director' AND fp.film.year <= :maxYear)) " +
+           "ORDER BY p.directorRating DESC")
+    List<Person> findDirectorsInYearRange(@Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, Pageable pageable);
+
+    @Query("SELECT p FROM Person p WHERE p.writerRating IS NOT NULL " +
+           "AND (:minYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'writer' AND fp.film.year >= :minYear)) " +
+           "AND (:maxYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'writer' AND fp.film.year <= :maxYear)) " +
+           "ORDER BY p.writerRating DESC")
+    List<Person> findWritersInYearRange(@Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, Pageable pageable);
+
+    @Query("SELECT p FROM Person p WHERE p.dopRating IS NOT NULL " +
+           "AND (:minYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'dop' AND fp.film.year >= :minYear)) " +
+           "AND (:maxYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'dop' AND fp.film.year <= :maxYear)) " +
+           "ORDER BY p.dopRating DESC")
+    List<Person> findDopsInYearRange(@Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, Pageable pageable);
+
+    @Query("SELECT p FROM Person p WHERE p.composerRating IS NOT NULL " +
+           "AND (:minYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'composer' AND fp.film.year >= :minYear)) " +
+           "AND (:maxYear IS NULL OR EXISTS (SELECT fp FROM FilmPerson fp WHERE fp.person = p AND fp.role = 'composer' AND fp.film.year <= :maxYear)) " +
+           "ORDER BY p.composerRating DESC")
+    List<Person> findComposersInYearRange(@Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, Pageable pageable);
 }
