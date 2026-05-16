@@ -4,6 +4,20 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/api',
 })
 
+api.interceptors.response.use(
+  r => r,
+  err => {
+    if (err.response?.status === 401) {
+      const path = window.location.pathname
+      if (path !== '/login' && path !== '/register') {
+        localStorage.removeItem('jwt')
+        window.location.href = '/login'
+      }
+    }
+    return Promise.reject(err)
+  }
+)
+
 function authHeader(token) {
   return { Authorization: `Bearer ${token}` }
 }
@@ -34,8 +48,8 @@ export const getGenres = () =>
   api.get('/genres').then(r => r.data)
 
 // Leaderboard
-export const getLeaderboard = (role) =>
-  api.get('/leaderboard', { params: { role } }).then(r => r.data)
+export const getLeaderboard = (role, minYear, maxYear) =>
+  api.get('/leaderboard', { params: { role, ...(minYear && { minYear }), ...(maxYear && { maxYear }) } }).then(r => r.data)
 
 // Auth
 export const register = (name, email, password) =>
