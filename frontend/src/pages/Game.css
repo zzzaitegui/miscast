@@ -18,6 +18,7 @@
 /* Game card */
 
 .game-card {
+  position: relative;
   display: flex;
   width: min(1400px, 100%);
   height: min(740px, calc(100svh - 130px));
@@ -111,7 +112,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding-bottom: 4px;
+  padding: 12px 12px 12px 12px;
 }
 
 .role-list::-webkit-scrollbar {
@@ -165,10 +166,36 @@
 .person-card.swapped::before {
   content: '';
   position: absolute;
-  inset: -7px -6px;
+  inset: -10px -10px;
   background: #1A1715;
   border-radius: 8px;
   z-index: -1;
+}
+
+.reset-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3a3633;
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.reset-btn:hover {
+  background: #555;
+  color: var(--text-active);
 }
 
 .card-overlay {
@@ -368,19 +395,36 @@
   transform: scaleY(0.93);
 }
 
-.game-result {
-  text-align: center;
-  font-size: 16px;
+/* Game over overlay */
+
+@keyframes game-overlay-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: game-overlay-fade 0.4s ease forwards;
+  z-index: 100;
+}
+
+.game-overlay-win {
+  background: #1EB95C;
+}
+
+.game-overlay-loss {
+  background: #B00020;
+}
+
+.game-overlay-text {
+  font-size: 80px;
   font-weight: 700;
-  flex-shrink: 0;
-  display: block;
+  color: #000;
+  letter-spacing: -0.04em;
+  display: inline-block;
   transform: scaleY(0.93);
-}
-
-.game-result.win {
-  color: rgb(30, 185, 92);
-}
-
-.game-result.loss {
-  color: rgb(176, 0, 32);
 }

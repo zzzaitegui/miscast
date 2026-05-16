@@ -15,19 +15,18 @@ const ROLE_LABELS = {
   composer: 'Composers',
 }
 
-// Directors/writers/DOP/composers each have outsized influence on film quality
-const ROLE_WEIGHTS = { director: 6, writer: 3, dop: 3, composer: 2, actor: 1 }
+const ROLE_WEIGHTS = { director: 10, writer: 5, actor: 3, dop: 2, composer: 1 }
+const GLOBAL_MEAN  = 6.5
+const IMPACT_SCALE = 0.04
 
 function getRoleRating(person, role) {
   return { actor: person.actorRating, director: person.directorRating, writer: person.writerRating, dop: person.dopRating, composer: person.composerRating }[role] ?? null
 }
 
-function computePredictedRating(roster) {
-  if (!roster.length) return 0
-  const totalWeight = roster.reduce((acc, slot) => acc + (ROLE_WEIGHTS[slot.role] ?? 1), 0)
-  const weightedSum = roster.reduce((acc, slot) =>
-    acc + (ROLE_WEIGHTS[slot.role] ?? 1) * (getRoleRating(slot.person, slot.role) ?? 6.5), 0)
-  return weightedSum / totalWeight
+function swapImpact(oldPerson, newPerson, role) {
+  const oldR = getRoleRating(oldPerson, role) ?? GLOBAL_MEAN
+  const newR = getRoleRating(newPerson, role) ?? GLOBAL_MEAN
+  return (ROLE_WEIGHTS[role] ?? 1) * (newR - oldR) * IMPACT_SCALE
 }
 
 function ClapperboardIcon() {
@@ -65,7 +64,7 @@ function PersonIcon() {
   )
 }
 
-function PersonCard({ slot, onClick }) {
+function PersonCard({ slot, onClick, onReset }) {
   const rating = getRoleRating(slot.person, slot.role)
   const photoUrl = slot.person.profilePath
     ? `https://image.tmdb.org/t/p/w185${slot.person.profilePath}`
@@ -73,6 +72,13 @@ function PersonCard({ slot, onClick }) {
 
   return (
     <div className={`person-card${slot.isSwapped ? ' swapped' : ''}`} onClick={onClick}>
+      {slot.isSwapped && (
+        <button
+          className="reset-btn"
+          onClick={e => { e.stopPropagation(); onReset(slot) }}
+          title="Reset to original"
+        >×</button>
+      )}
       <div className="person-photo-wrapper">
         {photoUrl
           ? <img src={photoUrl} alt={slot.person.name} className="person-photo" />
@@ -90,7 +96,7 @@ function PersonCard({ slot, onClick }) {
   )
 }
 
-function RoleGroup({ role, slots, onSlotClick }) {
+function RoleGroup({ role, slots, onSlotClick, onSlotReset }) {
   const listRef = useRef(null)
   const [canLeft, setCanLeft] = useState(false)
   const [canRight, setCanRight] = useState(false)
@@ -126,7 +132,7 @@ function RoleGroup({ role, slots, onSlotClick }) {
         )}
         <div className="role-list" ref={listRef} onScroll={checkScroll}>
           {slots.map(slot => (
-            <PersonCard key={slot.id} slot={slot} onClick={() => onSlotClick(slot)} />
+            <PersonCard key={slot.id} slot={slot} onClick={() => onSlotClick(slot)} onReset={onSlotReset} />
           ))}
         </div>
         {canRight && (
@@ -150,6 +156,7 @@ export default function Game() {
   const [roster, setRoster] = useState([])
   const [initialRating, setInitialRating] = useState(null)
   const [swapsUsed, setSwapsUsed] = useState(0)
+  const [swapDelta, setSwapDelta] = useState(0)
   const [swapTarget, setSwapTarget] = useState(null)
   const [gameOver, setGameOver] = useState(false)
   const [won, setWon] = useState(null)
@@ -171,9 +178,10 @@ export default function Game() {
         const seen = new Set()
         const initialRoster = filmData.filmPersons
           .filter(fp => { if (seen.has(fp.id)) return false; seen.add(fp.id); return true })
-          .map(fp => ({ ...fp, isSwapped: false }))
+          .map(fp => ({ ...fp, isSwapped: false, originalPerson: fp.person }))
         setRoster(initialRoster)
-        setInitialRating(computePredictedRating(initialRoster))
+        const filmBase = filmData.adjustedRating ?? filmData.tmdbRating ?? 5
+        setInitialRating(filmBase)
       } catch (e) {
         console.error(e)
       } finally {
@@ -183,7 +191,8 @@ export default function Game() {
     load()
   }, [filmId])
 
-  const predictedRating = computePredictedRating(roster)
+  const filmBase = film ? (film.adjustedRating ?? film.tmdbRating ?? 5) : 5
+  const predictedRating = Math.max(1, Math.min(10, filmBase + swapDelta))
 
   function openSwap(slot) {
     if (gameOver || (isDaily && swapsUsed >= 10)) return
@@ -192,6 +201,7 @@ export default function Game() {
 
   function handleSwap(newPerson) {
     if (!swapTarget || gameOver || (isDaily && swapsUsed >= 10)) return
+    setSwapDelta(prev => prev + swapImpact(swapTarget.person, newPerson, swapTarget.role))
     setRoster(prev => prev.map(s =>
       s.id === swapTarget.id ? { ...s, person: newPerson, isSwapped: true } : s
     ))
@@ -199,9 +209,18 @@ export default function Game() {
     setSwapTarget(null)
   }
 
+  function handleReset(slot) {
+    if (gameOver) return
+    setSwapDelta(prev => prev + swapImpact(slot.person, slot.originalPerson, slot.role))
+    setRoster(prev => prev.map(s =>
+      s.id === slot.id ? { ...s, person: s.originalPerson, isSwapped: false } : s
+    ))
+    setSwapsUsed(prev => Math.max(0, prev - 1))
+  }
+
   function handleSubmit() {
     if (gameOver) return
-    const current = computePredictedRating(roster)
+    const current = predictedRating
     let didWin = false
     if (isDaily && targetRating !== null) {
       const base = film.adjustedRating ?? film.tmdbRating
@@ -253,7 +272,7 @@ export default function Game() {
           </div>
           <div className="role-groups">
             {groupedRoster.map(({ role, slots }) => (
-              <RoleGroup key={role} role={role} slots={slots} onSlotClick={openSwap} />
+              <RoleGroup key={role} role={role} slots={slots} onSlotClick={openSwap} onSlotReset={handleReset} />
             ))}
           </div>
         </div>
@@ -294,12 +313,13 @@ export default function Game() {
 
           <p className="swap-counter">{isDaily ? `${swapsUsed}/10 swaps` : `${swapsUsed} swap${swapsUsed !== 1 ? 's' : ''}`}</p>
 
-          {gameOver && won !== null && (
-            <p className={`game-result ${won ? 'win' : 'loss'}`}>
-              {won ? 'You win!' : 'You lose!'}
-            </p>
-          )}
         </div>
+
+        {gameOver && isDaily && won !== null && (
+          <div className={`game-overlay ${won ? 'game-overlay-win' : 'game-overlay-loss'}`}>
+            <span className="game-overlay-text">{won ? 'You won!' : 'You lost!'}</span>
+          </div>
+        )}
 
       </div>
 
