@@ -53,6 +53,10 @@
 }
 
 .nav-profile {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: var(--text);
   display: flex;
   align-items: center;
@@ -60,6 +64,7 @@
 }
 
 .nav-profile:hover,
-.nav-profile.active {
+.nav-profile.active,
+.nav-profile.authenticated {
   color: var(--text-active);
 }

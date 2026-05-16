@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
 
 function PersonIcon() {
@@ -11,6 +12,18 @@ function PersonIcon() {
 }
 
 export default function Navbar() {
+  const { isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
+
+  function handleProfileClick() {
+    if (isAuthenticated) {
+      logout()
+      navigate('/')
+    } else {
+      navigate('/login')
+    }
+  }
+
   return (
     <nav className="navbar">
       <div className="navbar-links">
@@ -28,9 +41,12 @@ export default function Navbar() {
           ratings
         </NavLink>
       </div>
-      <NavLink to="/login" className={({ isActive }) => 'nav-profile' + (isActive ? ' active' : '')}>
+      <button
+        className={`nav-profile${isAuthenticated ? ' authenticated' : ''}`}
+        onClick={handleProfileClick}
+      >
         <PersonIcon />
-      </NavLink>
+      </button>
     </nav>
   )
 }
