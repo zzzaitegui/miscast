@@ -31,7 +31,7 @@ public class FaceoffController {
 
     @GetMapping("/persons")
     public List<FaceoffPersonDto> persons() {
-        return personRepository.findByMainRoleRatingIsNotNull().stream()
+        return personRepository.findFaceoffPersonPool().stream()
             .map(p -> new FaceoffPersonDto(
                 p.getId(), p.getName(), p.getProfilePath(),
                 p.getMainRole(), p.getMainRoleRating()

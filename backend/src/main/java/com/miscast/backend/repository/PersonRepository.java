@@ -1,12 +1,13 @@
 package com.miscast.backend.repository;
 
-import com.miscast.backend.entity.Person;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.miscast.backend.entity.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
@@ -30,6 +31,14 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     List<Person> findByMainRoleRatingIsNotNull();
     long countByMainRoleIsNull();
+
+    @Query("SELECT p FROM Person p WHERE p.mainRoleRating IS NOT NULL AND p.profilePath IS NOT NULL " +
+           "AND ((p.mainRole = 'actor'    AND p.actorCreditCount    >= 12) " +
+           " OR  (p.mainRole = 'director' AND p.directorCreditCount >= 6) " +
+           " OR  (p.mainRole = 'writer'   AND p.writerCreditCount   >= 6) " +
+           " OR  (p.mainRole = 'dop'      AND p.dopCreditCount      >= 10) " +
+           " OR  (p.mainRole = 'composer' AND p.composerCreditCount >= 6))")
+    List<Person> findFaceoffPersonPool();
 
     List<Person> findTop100ByActorRatingIsNotNullOrderByActorRatingDesc();
     List<Person> findTop100ByDirectorRatingIsNotNullOrderByDirectorRatingDesc();
