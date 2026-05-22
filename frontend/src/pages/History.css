@@ -109,7 +109,7 @@
 }
 
 .row-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-active);
   white-space: nowrap;
@@ -127,14 +127,14 @@
 }
 
 .row-mode {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text);
   display: inline-block;
   transform: scaleY(0.93);
 }
 
 .row-result {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   padding: 2px 7px;
   border-radius: 4px;
@@ -158,7 +158,7 @@
 }
 
 .row-swaps {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-hint);
   display: inline-block;
   transform: scaleY(0.93);
@@ -190,7 +190,7 @@
 }
 
 .history-circle-value {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #000;
   display: inline-block;
@@ -199,7 +199,7 @@
 }
 
 .history-circle-label {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-hint);
   display: inline-block;
   transform: scaleY(0.93);
@@ -208,7 +208,7 @@
 /* Faceoff metric badges (rectangular, same color scale as the game) */
 
 .history-fo-badge {
-  height: 26px;
+  height: 27px;
   min-width: 52px;
   padding: 0 8px;
   border-radius: 4px;
@@ -219,7 +219,7 @@
 }
 
 .history-fo-badge-value {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #000;
   display: inline-block;
@@ -240,7 +240,7 @@
 /* Date */
 
 .row-date {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-hint);
   flex-shrink: 0;
   display: inline-block;
