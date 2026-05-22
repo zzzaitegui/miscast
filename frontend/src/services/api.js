@@ -58,6 +58,13 @@ export const register = (name, email, password) =>
 export const login = (email, password) =>
   api.post('/auth/login', { email, password }).then(r => r.data)
 
+// Faceoff
+export const getFaceoffMovies = () =>
+  api.get('/faceoff/movies').then(r => r.data)
+
+export const getFaceoffPersons = () =>
+  api.get('/faceoff/persons').then(r => r.data)
+
 // Matches (protected)
 export const getMatches = (token) =>
   api.get('/matches', { headers: authHeader(token) }).then(r => r.data)

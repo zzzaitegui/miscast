@@ -1,0 +1,406 @@
+/* Outer wrapper — same centering as other landing pages */
+.fo-landing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 24px;
+}
+
+/* Card shell — same dimensions as landing card */
+.fo-card-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(920px, 100%);
+  height: 520px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  overflow: hidden;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.55));
+  padding: 30px 36px 22px;
+  box-sizing: border-box;
+  gap: 14px;
+}
+
+/* ── Header ── */
+
+.fo-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.fo-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* ── Carousel ── */
+
+/* Wrapper takes all remaining vertical space and centers the carousel row */
+.fo-carousel-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.fo-carousel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* "vs." column — spacer keeps it aligned with photos */
+.fo-vs-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fo-vs {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text);
+  /* vertically centered within the active photo height */
+  height: 178px;
+  display: flex;
+  align-items: center;
+  transform: scaleY(0.93);
+}
+
+/* ── Cards ── */
+
+.fo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.fo-card-side {
+  min-width: 124px;
+  align-self: center;
+}
+
+.fo-card-empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* "Does..." label or invisible spacer above the photo */
+.fo-does {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+  height: 30px;
+  line-height: 30px;
+  flex-shrink: 0;
+}
+
+.fo-does-spacer {
+  display: block;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* Photos — people (square) */
+.fo-photo {
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.fo-photo.fo-photo-active {
+  width: 178px;
+  height: 178px;
+}
+
+.fo-photo.fo-photo-side {
+  width: 124px;
+  height: 124px;
+}
+
+/* Photos — movies (portrait 2:3) */
+.fo-photo-movie.fo-photo-active {
+  width: 115px;
+  height: 170px;
+}
+
+.fo-photo-movie.fo-photo-side {
+  width: 81px;
+  height: 120px;
+}
+
+.fo-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fo-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #2a2826;
+}
+
+/* Dark overlay covering the entire side card (photo + name + badge) */
+.fo-side-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.68);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Name and role labels */
+.fo-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-active);
+  text-align: center;
+  max-width: 178px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transform: scaleY(0.93);
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.fo-card-side .fo-name {
+  font-size: 13px;
+  max-width: 124px;
+}
+
+/* Movie titles: constrain to poster width so text doesn't float wider than the image */
+.fo-card-movie .fo-name {
+  max-width: 130px;
+}
+
+.fo-card-movie.fo-card-side .fo-name {
+  max-width: 90px;
+}
+
+.fo-role {
+  font-size: 13px;
+  color: var(--text-hint);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.fo-card-side .fo-role {
+  font-size: 12px;
+}
+
+/* ── Rating badge ── */
+
+.fo-badge {
+  height: 25px;
+  min-width: 62px;
+  padding: 0 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.fo-badge-hidden {
+  background: #555 !important;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.fo-card-side .fo-badge {
+  height: 21px;
+  min-width: 51px;
+  font-size: 13px;
+}
+
+/* ── Action row ── */
+
+.fo-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.fo-action-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Higher / Lower buttons */
+.fo-btn {
+  height: 34px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #000;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.fo-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Higher: blue → green → amber */
+.fo-btn-higher {
+  background: linear-gradient(90deg, #1C68CC, #1EB95C, #FFB900);
+}
+
+/* Lower: amber → orange → red */
+.fo-btn-lower {
+  background: linear-gradient(90deg, #FFB900, #DC5000, #B00020);
+}
+
+/* ── Score ── */
+
+.fo-score {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text-active);
+  text-align: center;
+  display: inline-block;
+  transform: scaleY(0.93);
+  flex-shrink: 0;
+}
+
+/* ── Loading ── */
+
+.fo-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-hint);
+  font-size: 16px;
+}
+
+/* ── Game over overlay ── */
+
+.fo-gameover {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  animation: fo-fade-in 0.4s ease;
+  z-index: 10;
+}
+
+@keyframes fo-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.fo-gameover-score {
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+  line-height: 1;
+}
+
+.fo-gameover-label {
+  font-size: 16px;
+  color: var(--text);
+  display: inline-block;
+  transform: scaleY(0.93);
+  margin-bottom: 8px;
+}
+
+.fo-gameover-cards {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.fo-gameover-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.fo-gameover-card-name {
+  font-size: 14px;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.fo-gameover-vs {
+  font-size: 16px;
+  color: var(--text);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.fo-gameover-buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.fo-gameover-btn {
+  height: 40px;
+  padding: 0 28px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transform: scaleY(0.93);
+  display: inline-block;
+}
+
+.fo-gameover-btn-play {
+  background: linear-gradient(90deg, #1C68CC, #1EB95C, #FFB900, #DC5000, #B00020);
+  color: #000;
+}
+
+.fo-gameover-btn-exit {
+  background: #2a2826;
+  color: var(--text);
+}

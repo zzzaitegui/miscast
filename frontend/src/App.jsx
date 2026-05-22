@@ -9,6 +9,8 @@ import Register from './pages/Register'
 import History from './pages/History'
 import Studio from './pages/Studio'
 import StudioGame from './pages/StudioGame'
+import Faceoff from './pages/Faceoff'
+import FaceoffGame from './pages/FaceoffGame'
 import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
 
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/studio" element={<Studio />} />
           <Route path="/studio/play" element={<StudioGame />} />
+          <Route path="/faceoff" element={<Faceoff />} />
+          <Route path="/faceoff/play" element={<FaceoffGame />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
