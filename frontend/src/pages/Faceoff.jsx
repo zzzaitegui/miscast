@@ -1,6 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Faceoff.css'
+
+const slides = Object.entries(
+  import.meta.glob('../assets/faceoff-slideshow/*.webp', { eager: true })
+).sort(([a], [b]) => a.localeCompare(b)).map(([, m]) => m.default)
 
 function ScaleIcon() {
   return (
@@ -36,6 +40,31 @@ function Toggle({ leftLabel, rightLabel, value, onChange }) {
   )
 }
 
+function FaceoffSlideshow() {
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    if (slides.length < 2) return
+    const id = setInterval(() => {
+      setActive(i => (i + 1) % slides.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <div className="faceoff-card-slideshow">
+      {slides.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className={`faceoff-slide${i === active ? ' is-active' : ''}`}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function Faceoff() {
   const navigate = useNavigate()
   const [category, setCategory] = useState('Movies')
@@ -59,7 +88,6 @@ export default function Faceoff() {
             Try to guess which film or person is better rated,
             for films you may choose between ratings or popularity.
           </p>
-          {/* stopPropagation covers the toggles + a grace zone around them */}
           <div className="faceoff-toggles-area" onClick={e => e.stopPropagation()}>
             <div className="faceoff-toggles">
               <Toggle
@@ -79,8 +107,7 @@ export default function Faceoff() {
             </div>
           </div>
         </div>
-        {/* SLIDESHOW STUB — replace with <FaceoffSlideshow /> once assets are ready */}
-        <div className="faceoff-card-slideshow" />
+        <FaceoffSlideshow />
       </div>
       <p className="faceoff-hint">Click to play...</p>
     </div>

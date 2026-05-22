@@ -145,13 +145,28 @@
   transform: scaleY(0.93);
 }
 
-/* Right column — slideshow placeholder */
+/* Right column — slideshow */
 
 .faceoff-card-slideshow {
+  position: relative;
   width: 390px;
   flex-shrink: 0;
   background: #2a2826;
-  /* SLIDESHOW: swap background for actual image carousel once assets land */
+  overflow: hidden;
+}
+
+.faceoff-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.faceoff-slide.is-active {
+  opacity: 1;
 }
 
 /* Hint */
