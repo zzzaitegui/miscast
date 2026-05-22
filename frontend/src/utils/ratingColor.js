@@ -9,7 +9,7 @@ const COLOR_STOPS = [
 export function getVoteCountColor(count) {
   if (count == null) return 'rgb(80, 80, 80)'
   const score = Math.max(0, Math.min(10,
-    (Math.log10(Math.max(count, 1000)) - 3) / (Math.log10(20000) - 3) * 10
+    (Math.log10(Math.max(count, 1000)) - 3) / (Math.log10(30000) - 3) * 10
   ))
   return getRatingColor(score)
 }
