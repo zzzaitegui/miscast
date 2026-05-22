@@ -1,0 +1,364 @@
+.leaderboard-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+/* Card */
+
+.leaderboard-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, 100%);
+  height: min(740px, calc(100svh - 160px));
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 36px 40px 32px;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.55));
+  overflow: hidden;
+}
+
+.leaderboard-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent 0%, var(--card-bg) 65%);
+  pointer-events: none;
+  border-radius: 0 0 14px 14px;
+}
+
+/* Top: title + filters */
+
+.leaderboard-top {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+}
+
+.leaderboard-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+}
+
+.leaderboard-icon-color {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+}
+
+.leaderboard-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Filters */
+
+.leaderboard-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-selector {
+  position: relative;
+}
+
+.filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1A1715;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: -0.07em;
+  cursor: pointer;
+}
+
+.filter-text {
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.role-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #1A1715;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 20;
+  min-width: 170px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: -0.07em;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.role-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.role-option.active {
+  color: var(--text-active);
+}
+
+.filter-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: -0.07em;
+  width: 36px;
+  text-align: center;
+  padding: 0;
+}
+
+.filter-input::-webkit-outer-spin-button,
+.filter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.filter-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.year-pill {
+  padding: 8px 10px;
+}
+
+.year-input {
+  width: 44px;
+}
+
+.year-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--text);
+  flex-shrink: 0;
+  margin: 0 8px;
+  opacity: 0.4;
+}
+
+/* State */
+
+.leaderboard-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-hint);
+  font-size: 15px;
+}
+
+/* Scrollable list */
+
+.leaderboard-list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 72px;
+}
+
+.leaderboard-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Row */
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 8px;
+  border-bottom: 1px solid #1A1715;
+}
+
+.leaderboard-row:last-child {
+  border-bottom: none;
+}
+
+/* Rank */
+
+.lb-rank {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-active);
+  min-width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Person */
+
+.lb-person {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 190px;
+  flex-shrink: 0;
+}
+
+.lb-photo {
+  width: 46px;
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.lb-photo-placeholder {
+  background: #2a2826;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.lb-person-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0 4px;
+}
+
+.lb-rating {
+  align-self: flex-start;
+  min-width: 36px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.lb-rating-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #000;
+  display: inline-block;
+  transform: scaleY(0.93);
+  letter-spacing: -0.03em;
+}
+
+.lb-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-active);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Credits */
+
+.lb-credits {
+  width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.lb-credits-text {
+  font-size: 13px;
+  color: var(--text);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Most known film */
+
+.lb-film {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lb-film-label {
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.lb-poster-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lb-poster {
+  width: 36px;
+  height: 54px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+}
+
+.lb-poster-placeholder {
+  background: #2a2826;
+}
+
+.lb-poster-rating {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #000;
+  padding: 1px 3px;
+  border-radius: 3px;
+  min-width: 24px;
+  text-align: center;
+  letter-spacing: -0.02em;
+}

@@ -1,15 +1,21 @@
 package com.miscast.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public record MatchResponse(
     Long id,
     Long filmId,
     String filmTitle,
+    Integer filmYear,
+    Double filmBaseRating,
     Double targetRating,
     Double finalRating,
     int swapsUsed,
     boolean won,
-    LocalDateTime completedAt,
-    String mode
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime completedAt,
+    String mode,
+    String faceoffLeftLabel,
+    String faceoffRightLabel,
+    String faceoffMetric
 ) {}

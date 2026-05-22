@@ -1,13 +1,15 @@
 package com.miscast.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record MatchRequest(
-    @NotNull Long filmId,
+    Long filmId,
     Double targetRating,
-    @NotNull Double finalRating,
+    Double finalRating,
     int swapsUsed,
     boolean won,
-    @NotBlank String mode
+    @NotBlank String mode,
+    String faceoffLeftLabel,
+    String faceoffRightLabel,
+    String faceoffMetric
 ) {}

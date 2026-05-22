@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DataPersistenceService {
@@ -50,10 +52,10 @@ public class DataPersistenceService {
             film.setPosterPath(fd.posterPath());
             film.setOverview(fd.overview());
 
-            List<Genre> genres = fd.genreIds().stream()
+            Set<Genre> genres = fd.genreIds().stream()
                 .filter(genreMap::containsKey)
                 .map(id -> genreRepository.getReferenceById(id))
-                .toList();
+                .collect(Collectors.toSet());
             film.setGenres(genres);
             return film;
         }).toList();

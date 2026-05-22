@@ -1,0 +1,233 @@
+.search-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 24px;
+}
+
+/* Main card */
+
+.custom-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(1280px, 100%);
+  height: min(700px, calc(100svh - 160px));
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 36px 40px 32px;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.55));
+  overflow: hidden;
+}
+
+.custom-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent 0%, var(--card-bg) 60%);
+  pointer-events: none;
+  border-radius: 0 0 14px 14px;
+}
+
+/* Header */
+
+.custom-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+}
+
+.custom-card-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.custom-card-subtitle {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.5;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Search bar */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #111010;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 14px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.search-bar-icon {
+  color: var(--text-hint);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.search-bar-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: inherit;
+  color: var(--text-active);
+}
+
+.search-bar-input::placeholder {
+  color: var(--text-hint);
+}
+
+.search-bar-count {
+  font-size: 13px;
+  color: var(--text-hint);
+  flex-shrink: 0;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Film grid */
+
+.films-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: 14px;
+  overflow-y: auto;
+  min-height: 0;
+  align-content: start;
+  /* hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.films-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Empty / loading state inside grid */
+
+.search-state {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  color: var(--text-hint);
+  font-size: 15px;
+}
+
+/* Film thumbnail card */
+
+.film-thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.film-thumb-poster-area {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #111010;
+  transition: transform 0.18s, filter 0.18s;
+}
+
+.film-thumb:hover .film-thumb-poster-area {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+.film-thumb-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.film-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1715;
+}
+
+/* Bottom footer inside poster */
+
+.film-thumb-poster-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 22px 6px 6px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.film-thumb-year {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.film-thumb-rating {
+  width: 28px;
+  height: 18px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+/* Title below poster */
+
+.film-thumb-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-active);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transform: scaleY(0.93);
+  transform-origin: top left;
+}
+
+/* Hint below card */
+
+.search-page-hint {
+  font-size: 15px;
+  color: #757575;
+  display: inline-block;
+  transform: scaleY(0.93);
+}

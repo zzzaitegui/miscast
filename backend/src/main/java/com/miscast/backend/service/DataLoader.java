@@ -256,7 +256,38 @@ public class DataLoader implements CommandLineRunner {
             }
         }
 
+        applyMainRole(person);
         return person;
+    }
+
+    static void applyMainRole(Person person) {
+        String[] roles = {"actor", "director", "writer", "dop", "composer"};
+        int[] counts = {
+            person.getActorCreditCount(), person.getDirectorCreditCount(),
+            person.getWriterCreditCount(), person.getDopCreditCount(), person.getComposerCreditCount()
+        };
+        Double[] ratings = {
+            person.getActorRating(), person.getDirectorRating(),
+            person.getWriterRating(), person.getDopRating(), person.getComposerRating()
+        };
+
+        String bestRole = null;
+        Double bestRating = null;
+        int bestCount = -1;
+        int bestIdx = Integer.MAX_VALUE;
+
+        for (int i = 0; i < 5; i++) {
+            if (ratings[i] == null) continue;
+            if (bestRole == null || counts[i] > bestCount || (counts[i] == bestCount && i < bestIdx)) {
+                bestCount = counts[i];
+                bestIdx = i;
+                bestRole = roles[i];
+                bestRating = ratings[i];
+            }
+        }
+
+        person.setMainRole(bestRole);
+        person.setMainRoleRating(bestRating);
     }
 
     private double bayesian(double weightedSum, long totalVotes) {

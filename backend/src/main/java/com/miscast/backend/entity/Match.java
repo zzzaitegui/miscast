@@ -16,12 +16,10 @@ public class Match {
     private AppUser user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "film_id", nullable = false)
+    @JoinColumn(name = "film_id", nullable = true)
     private Film film;
 
     private Double targetRating;
-
-    @Column(nullable = false)
     private Double finalRating;
 
     @Column(nullable = false)
@@ -35,6 +33,10 @@ public class Match {
 
     @Column(nullable = false)
     private String mode;
+
+    private String faceoffLeftLabel;
+    private String faceoffRightLabel;
+    private String faceoffMetric;
 
     public Match() {}
 
@@ -56,4 +58,10 @@ public class Match {
     public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
     public String getMode() { return mode; }
     public void setMode(String mode) { this.mode = mode; }
+    public String getFaceoffLeftLabel() { return faceoffLeftLabel; }
+    public void setFaceoffLeftLabel(String faceoffLeftLabel) { this.faceoffLeftLabel = faceoffLeftLabel; }
+    public String getFaceoffRightLabel() { return faceoffRightLabel; }
+    public void setFaceoffRightLabel(String faceoffRightLabel) { this.faceoffRightLabel = faceoffRightLabel; }
+    public String getFaceoffMetric() { return faceoffMetric; }
+    public void setFaceoffMetric(String faceoffMetric) { this.faceoffMetric = faceoffMetric; }
 }

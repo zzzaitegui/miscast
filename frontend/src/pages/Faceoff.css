@@ -1,0 +1,179 @@
+.faceoff-landing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 24px;
+}
+
+/* Card shell — same dimensions and shadow as Home / Studio */
+
+.faceoff-card {
+  display: flex;
+  width: min(920px, 100%);
+  height: 520px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  overflow: hidden;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.55));
+  cursor: pointer;
+  transition: filter 0.25s;
+}
+
+.faceoff-card:hover {
+  filter: drop-shadow(0 20px 64px rgba(0, 0, 0, 0.75));
+}
+
+/* Left content */
+
+.faceoff-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 44px 40px 44px 48px;
+  gap: 18px;
+  min-width: 0;
+}
+
+.faceoff-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+}
+
+.faceoff-card-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.faceoff-card-description {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.55;
+  display: block;
+  transform: scaleY(0.93);
+}
+
+/* Toggle grace zone — clicks inside here stop propagation to the card */
+
+.faceoff-toggles-area {
+  align-self: flex-start;
+  padding: 14px 16px;
+  margin: -14px -16px;
+  cursor: default;
+}
+
+.faceoff-toggles {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* Toggle group: pill + label */
+
+.faceoff-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Pill */
+
+.faceoff-toggle {
+  width: 58px;
+  height: 28px;
+  border-radius: 13px;
+  border: 2px solid #ffffff;
+  background: transparent;
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Each half centers its dot so expansion is uniform in all directions */
+
+.toggle-half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dots */
+
+.toggle-dot {
+  background: #ffffff;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: width 0.18s ease, height 0.18s ease;
+}
+
+/* Left selected: dot-a big, dot-b small */
+.faceoff-toggle.is-left .toggle-dot-a {
+  width: 14px;
+  height: 14px;
+}
+.faceoff-toggle.is-left .toggle-dot-b {
+  width: 6px;
+  height: 6px;
+}
+
+/* Right selected: dot-a small, dot-b big */
+.faceoff-toggle.is-right .toggle-dot-a {
+  width: 6px;
+  height: 6px;
+}
+.faceoff-toggle.is-right .toggle-dot-b {
+  width: 14px;
+  height: 14px;
+}
+
+.faceoff-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+/* Right column — slideshow */
+
+.faceoff-card-slideshow {
+  position: relative;
+  width: 390px;
+  flex-shrink: 0;
+  background: #2a2826;
+  overflow: hidden;
+}
+
+.faceoff-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.faceoff-slide.is-active {
+  opacity: 1;
+}
+
+/* Hint */
+
+.faceoff-hint {
+  font-size: 15px;
+  color: #757575;
+  display: block;
+  transform: scaleY(0.93);
+}

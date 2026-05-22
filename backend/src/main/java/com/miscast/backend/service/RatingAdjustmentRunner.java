@@ -61,6 +61,17 @@ public class RatingAdjustmentRunner implements CommandLineRunner {
                 person.setDopRating(transformService.transform(person.getDopRating()));
             if (person.getComposerRating() != null)
                 person.setComposerRating(transformService.transform(person.getComposerRating()));
+            // Sync mainRoleRating to the freshly adjusted value of whichever role is primary
+            if (person.getMainRole() != null) {
+                person.setMainRoleRating(switch (person.getMainRole()) {
+                    case "actor"    -> person.getActorRating();
+                    case "director" -> person.getDirectorRating();
+                    case "writer"   -> person.getWriterRating();
+                    case "dop"      -> person.getDopRating();
+                    case "composer" -> person.getComposerRating();
+                    default         -> null;
+                });
+            }
         }
         personRepository.saveAll(persons);
         log.info("Rating adjustment complete for {} persons.", persons.size());
