@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { getFaceoffMovies, getFaceoffPersons } from '../services/api'
+import { getFaceoffMovies, getFaceoffPersons, saveMatch } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 import './FaceoffGame.css'
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -38,7 +39,7 @@ function ratingColor(v) {
 // Log scale: 1,000 votes → red (0), 15,000+ votes → blue (10)
 function voteCountColor(count) {
   const score = Math.max(0, Math.min(10,
-    (Math.log10(Math.max(count, 1000)) - 3) / (Math.log10(20000) - 3) * 10
+    (Math.log10(Math.max(count, 1000)) - 3) / (Math.log10(25000) - 3) * 10
   ))
   return ratingColor(score)
 }
@@ -168,6 +169,7 @@ function GameOverOverlay({ score, leftCard, rightCard, metric, category, onPlayA
 export default function FaceoffGame() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
+  const { token } = useAuth()
   const category = params.get('category') ?? 'movies'
   const metric = params.get('metric') ?? 'rating'
 
@@ -236,6 +238,9 @@ export default function FaceoffGame() {
     // Capture for use inside the async callback (stable at call time)
     const nextIndex = index + 1
     const willExhaust = nextIndex + 2 >= pool.length
+    const capturedLeft = leftCard
+    const capturedRight = rightCard
+    const capturedScore = score
 
     setPhase('revealing')
     animateReveal(rightVal, () => {
@@ -251,7 +256,22 @@ export default function FaceoffGame() {
         setPhase('guessing')
       } else {
         setPhase('wrong')
-        setTimeout(() => setPhase('gameover'), 1000)
+        setTimeout(() => {
+          setPhase('gameover')
+          if (token) {
+            const faceoffMetric = category === 'people' ? 'mainRoleRating' : metric
+            saveMatch({
+              mode: 'faceoff',
+              swapsUsed: capturedScore,
+              targetRating: leftVal,
+              finalRating: rightVal,
+              won: false,
+              faceoffLeftLabel: capturedLeft?.name ?? capturedLeft?.title,
+              faceoffRightLabel: capturedRight?.name ?? capturedRight?.title,
+              faceoffMetric,
+            }, token).catch(() => {})
+          }
+        }, 1000)
       }
     })
   }

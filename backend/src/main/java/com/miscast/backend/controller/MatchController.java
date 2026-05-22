@@ -40,18 +40,30 @@ public class MatchController {
     @PostMapping
     public ResponseEntity<MatchResponse> saveMatch(@Valid @RequestBody MatchRequest request, Authentication auth) {
         AppUser user = resolveUser(auth);
-        Film film = filmRepository.findById(request.filmId())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found"));
 
         Match match = new Match();
         match.setUser(user);
-        match.setFilm(film);
-        match.setTargetRating(request.targetRating());
-        match.setFinalRating(request.finalRating());
-        match.setSwapsUsed(request.swapsUsed());
-        match.setWon(request.won());
         match.setMode(request.mode());
         match.setCompletedAt(LocalDateTime.now());
+
+        if ("faceoff".equals(request.mode())) {
+            int prevBest = matchRepository.findMaxFaceoffScore(user).orElse(-1);
+            match.setSwapsUsed(request.swapsUsed());
+            match.setWon(request.swapsUsed() > prevBest);
+            match.setTargetRating(request.targetRating());
+            match.setFinalRating(request.finalRating());
+            match.setFaceoffLeftLabel(request.faceoffLeftLabel());
+            match.setFaceoffRightLabel(request.faceoffRightLabel());
+            match.setFaceoffMetric(request.faceoffMetric());
+        } else {
+            Film film = filmRepository.findById(request.filmId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film not found"));
+            match.setFilm(film);
+            match.setTargetRating(request.targetRating());
+            match.setFinalRating(request.finalRating());
+            match.setSwapsUsed(request.swapsUsed());
+            match.setWon(request.won());
+        }
 
         Match saved = matchRepository.save(match);
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(saved));
@@ -64,12 +76,16 @@ public class MatchController {
 
     private MatchResponse toResponse(Match m) {
         Film f = m.getFilm();
-        Double baseRating = f.getAdjustedRating() != null ? f.getAdjustedRating() : f.getTmdbRating();
+        Long filmId = f != null ? f.getId() : null;
+        String filmTitle = f != null ? f.getTitle() : null;
+        Integer filmYear = f != null ? f.getYear() : null;
+        Double baseRating = f != null ? (f.getAdjustedRating() != null ? f.getAdjustedRating() : f.getTmdbRating()) : null;
         return new MatchResponse(
-            m.getId(), f.getId(), f.getTitle(), f.getYear(), baseRating,
+            m.getId(), filmId, filmTitle, filmYear, baseRating,
             m.getTargetRating(), m.getFinalRating(),
             m.getSwapsUsed(), m.isWon(),
-            m.getCompletedAt(), m.getMode()
+            m.getCompletedAt(), m.getMode(),
+            m.getFaceoffLeftLabel(), m.getFaceoffRightLabel(), m.getFaceoffMetric()
         );
     }
 }

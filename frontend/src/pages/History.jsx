@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMatches } from '../services/api'
 import { useAuth } from '../context/AuthContext'
-import { getRatingColor } from '../utils/ratingColor'
+import { getRatingColor, getVoteCountColor } from '../utils/ratingColor'
 import './History.css'
 
 function HistoryIcon() {
@@ -20,6 +20,21 @@ function RatingCircle({ value, label }) {
     <div className="history-circle-wrapper">
       <div className="history-circle" style={{ background: color }}>
         <span className="history-circle-value">{value?.toFixed(1)}</span>
+      </div>
+      <span className="history-circle-label">{label}</span>
+    </div>
+  )
+}
+
+function FaceoffBadge({ value, metric, label }) {
+  const color = metric === 'votes' ? getVoteCountColor(value) : getRatingColor(value)
+  const display = metric === 'votes'
+    ? Math.round(value).toLocaleString()
+    : Number(value).toFixed(1)
+  return (
+    <div className="history-circle-wrapper">
+      <div className="history-fo-badge" style={{ background: color }}>
+        <span className="history-fo-badge-value">{display}</span>
       </div>
       <span className="history-circle-label">{label}</span>
     </div>
@@ -66,6 +81,44 @@ function HistoryRow({ match }) {
   )
 }
 
+function FaceoffRow({ match }) {
+  const metricIsVotes = match.faceoffMetric === 'votes'
+  const leftLabel = match.faceoffLeftLabel ?? '—'
+  const rightLabel = match.faceoffRightLabel ?? '—'
+
+  return (
+    <div className="history-row history-row-no-click">
+      <div className="row-film">
+        <p className="row-title">{leftLabel} vs {rightLabel}</p>
+        <div className="row-tags">
+          <span className="row-mode">Face/Off</span>
+          {match.won && <span className="row-result record">Record</span>}
+          <span className="row-swaps">{match.swapsUsed} pt{match.swapsUsed !== 1 ? 's' : ''}</span>
+        </div>
+      </div>
+
+      <div className="row-ratings">
+        {match.targetRating != null && (
+          <FaceoffBadge
+            value={match.targetRating}
+            metric={metricIsVotes ? 'votes' : 'rating'}
+            label={leftLabel.length > 14 ? leftLabel.slice(0, 13) + '…' : leftLabel}
+          />
+        )}
+        {match.finalRating != null && (
+          <FaceoffBadge
+            value={match.finalRating}
+            metric={metricIsVotes ? 'votes' : 'rating'}
+            label={rightLabel.length > 14 ? rightLabel.slice(0, 13) + '…' : rightLabel}
+          />
+        )}
+      </div>
+
+      <span className="row-date">{formatDate(match.completedAt)}</span>
+    </div>
+  )
+}
+
 export default function History() {
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
@@ -95,9 +148,11 @@ export default function History() {
           </div>
         ) : (
           <div className="history-list">
-            {matches.map((match, i) => (
-              <HistoryRow key={match.id} match={match} isLast={i === matches.length - 1} />
-            ))}
+            {matches.map((match) =>
+              match.mode === 'faceoff'
+                ? <FaceoffRow key={match.id} match={match} />
+                : <HistoryRow key={match.id} match={match} />
+            )}
           </div>
         )}
       </div>

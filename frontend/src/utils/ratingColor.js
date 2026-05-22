@@ -6,6 +6,14 @@ const COLOR_STOPS = [
   { r: 10,  rgb: [28,  104, 204] },
 ]
 
+export function getVoteCountColor(count) {
+  if (count == null) return 'rgb(80, 80, 80)'
+  const score = Math.max(0, Math.min(10,
+    (Math.log10(Math.max(count, 1000)) - 3) / (Math.log10(20000) - 3) * 10
+  ))
+  return getRatingColor(score)
+}
+
 export function getRatingColor(rating) {
   if (rating == null) return 'rgb(80, 80, 80)'
   const v = Math.max(0, Math.min(10, rating))

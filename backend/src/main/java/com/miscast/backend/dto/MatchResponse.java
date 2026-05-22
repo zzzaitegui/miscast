@@ -7,12 +7,15 @@ public record MatchResponse(
     Long id,
     Long filmId,
     String filmTitle,
-    int filmYear,
+    Integer filmYear,
     Double filmBaseRating,
     Double targetRating,
     Double finalRating,
     int swapsUsed,
     boolean won,
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime completedAt,
-    String mode
+    String mode,
+    String faceoffLeftLabel,
+    String faceoffRightLabel,
+    String faceoffMetric
 ) {}
