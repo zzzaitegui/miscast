@@ -234,7 +234,10 @@ export default function FaceoffGame() {
     if (phase !== 'guessing') return
     const leftVal = getMetricValue(leftCard)
     const rightVal = getMetricValue(rightCard)
-    const correct = rightVal === leftVal || (direction === 'higher' ? rightVal > leftVal : rightVal < leftVal)
+    const round = v => metric === 'votes' ? Math.round(v) : parseFloat(v.toFixed(1))
+    const leftDisplay = round(leftVal)
+    const rightDisplay = round(rightVal)
+    const correct = leftDisplay === rightDisplay || (direction === 'higher' ? rightDisplay > leftDisplay : rightDisplay < leftDisplay)
     // Capture for use inside the async callback (stable at call time)
     const nextIndex = index + 1
     const willExhaust = nextIndex + 2 >= pool.length
