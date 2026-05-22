@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import maulCamera from '../assets/maul_camera.png'
+import maulCamera from '../assets/maul_camera.webp'
 import './Studio.css'
 
 function FilmCameraIcon() {
