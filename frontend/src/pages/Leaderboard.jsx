@@ -146,14 +146,16 @@ export default function Leaderboard() {
   const [maxYear, setMaxYear]       = useState('')
   const [entries, setEntries]       = useState([])
   const [loading, setLoading]       = useState(true)
+  const [error, setError]           = useState(false)
 
   useEffect(() => {
     const hasYear = minYear || maxYear
     const t = setTimeout(() => {
       setLoading(true)
+      setError(false)
       getLeaderboard(role, minYear || undefined, maxYear || undefined)
-        .then(setEntries)
-        .catch(() => setEntries([]))
+        .then(data => { setEntries(data); setError(false) })
+        .catch(() => { setEntries([]); setError(true) })
         .finally(() => setLoading(false))
     }, hasYear ? 500 : 0)
     return () => clearTimeout(t)
@@ -206,6 +208,8 @@ export default function Leaderboard() {
 
         {loading ? (
           <div className="leaderboard-state">Loading...</div>
+        ) : error ? (
+          <div className="leaderboard-state">Could not load leaderboard.</div>
         ) : filtered.length === 0 ? (
           <div className="leaderboard-state">No results for these filters.</div>
         ) : (
