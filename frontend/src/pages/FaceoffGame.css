@@ -405,3 +405,9 @@
   background: #2a2826;
   color: var(--text);
 }
+
+@media (max-width: 900px) {
+  .fo-card-side {
+    display: none;
+  }
+}
