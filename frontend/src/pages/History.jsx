@@ -122,12 +122,13 @@ function FaceoffRow({ match }) {
 export default function History() {
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const { token } = useAuth()
 
   useEffect(() => {
     getMatches(token)
-      .then(setMatches)
-      .catch(() => {})
+      .then(data => { setMatches(data); setError(false) })
+      .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [token])
 
@@ -141,6 +142,8 @@ export default function History() {
 
         {loading ? (
           <div className="history-state">Loading...</div>
+        ) : error ? (
+          <div className="history-state">Could not load history.</div>
         ) : matches.length === 0 ? (
           <div className="history-state">
             <p>No matches yet.</p>

@@ -137,3 +137,18 @@
   transform: scaleY(0.93);
 }
 
+@media (max-width: 900px) {
+  .film-card {
+    height: auto;
+    min-height: 280px;
+  }
+
+  .film-card-right {
+    display: none;
+  }
+
+  .film-card-left {
+    padding: 36px 32px;
+  }
+}
+

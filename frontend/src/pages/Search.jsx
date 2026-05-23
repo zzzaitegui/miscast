@@ -53,6 +53,7 @@ export default function Search() {
   const [allFilms, setAllFilms] = useState([])
   const [films, setFilms] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const debounceRef = useRef(null)
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function Search() {
         setAllFilms(page.content)
         setFilms(page.content)
       })
-      .catch(() => {})
+      .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [])
 
@@ -71,7 +72,7 @@ export default function Search() {
     debounceRef.current = setTimeout(() => {
       const trimmed = val.trim()
       if (trimmed.length >= 2) {
-        searchFilms(trimmed).then(setFilms).catch(() => {})
+        searchFilms(trimmed).then(setFilms).catch(() => setFilms([]))
       } else {
         setFilms(allFilms)
       }
@@ -96,7 +97,7 @@ export default function Search() {
             onChange={e => handleSearch(e.target.value)}
             autoFocus
           />
-          {!loading && (
+          {!loading && !error && (
             <span className="search-bar-count">{films.length} films</span>
           )}
         </div>
@@ -104,6 +105,8 @@ export default function Search() {
         <div className="films-grid">
           {loading ? (
             <div className="search-state">Loading films...</div>
+          ) : error ? (
+            <div className="search-state">Could not load films.</div>
           ) : films.length === 0 ? (
             <div className="search-state">No films found for "{query}".</div>
           ) : (

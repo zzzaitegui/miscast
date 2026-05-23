@@ -362,3 +362,13 @@
   text-align: center;
   letter-spacing: -0.02em;
 }
+
+@media (max-width: 900px) {
+  .lb-film {
+    display: none;
+  }
+
+  .lb-credits {
+    width: auto;
+  }
+}

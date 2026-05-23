@@ -75,3 +75,18 @@
   display: block;
   transform: scaleY(0.93);
 }
+
+@media (max-width: 900px) {
+  .studio-card {
+    height: auto;
+    min-height: 260px;
+  }
+
+  .studio-card-poster {
+    display: none;
+  }
+
+  .studio-card-content {
+    padding: 36px 32px;
+  }
+}

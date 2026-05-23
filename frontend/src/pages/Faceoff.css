@@ -177,3 +177,18 @@
   display: block;
   transform: scaleY(0.93);
 }
+
+@media (max-width: 900px) {
+  .faceoff-card {
+    height: auto;
+    min-height: 280px;
+  }
+
+  .faceoff-card-slideshow {
+    display: none;
+  }
+
+  .faceoff-card-content {
+    padding: 36px 32px;
+  }
+}
