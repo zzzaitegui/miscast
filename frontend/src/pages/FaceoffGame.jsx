@@ -193,7 +193,7 @@ export default function FaceoffGame() {
       setDisplayedValue(0)
       setPhase('guessing')
     } catch {
-      setPhase('loading')
+      setPhase('error')
     }
   }, [category])
 
@@ -289,7 +289,7 @@ export default function FaceoffGame() {
 
   const metricWord = metric === 'votes' ? 'vote count' : 'rating'
 
-  if (phase === 'loading') {
+  if (phase === 'loading' || phase === 'error') {
     return (
       <div className="fo-landing">
         <div className="fo-card-shell">
@@ -297,7 +297,16 @@ export default function FaceoffGame() {
             <ScaleIcon />
             <h2 className="fo-title">Face/Off</h2>
           </div>
-          <div className="fo-loading">Loading...</div>
+          {phase === 'error' ? (
+            <div className="fo-loading">
+              <span>Could not load game data.</span>
+              <button className="fo-gameover-btn fo-gameover-btn-play" style={{ marginTop: 16 }} onClick={loadPool}>
+                Try again
+              </button>
+            </div>
+          ) : (
+            <div className="fo-loading">Loading...</div>
+          )}
         </div>
       </div>
     )
