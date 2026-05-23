@@ -65,6 +65,15 @@ function ScaleIcon() {
   )
 }
 
+function XIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
 function RatingBadge({ value, hidden, metric }) {
   if (hidden) {
     return <div className="fo-badge fo-badge-hidden">???</div>
@@ -327,20 +336,30 @@ export default function FaceoffGame() {
         <div className="fo-carousel-wrapper">
         <div className="fo-carousel">
           <Card card={prevCard} size="side" revealed category={category} metric={metric} />
-          <Card card={leftCard} size="active" revealed category={category} metric={metric} />
+          <div className={`fo-active-wrapper${phase === 'wrong' ? ' fo-wrong-shift-left' : ''}`}>
+            <Card card={leftCard} size="active" revealed category={category} metric={metric} />
+          </div>
           <div className="fo-vs-col">
             <span className="fo-does-spacer" />
-            <span className="fo-vs">vs.</span>
+            {phase === 'wrong' ? (
+              <div className="fo-wrong-indicator">
+                <div className="fo-wrong-circle"><XIcon /></div>
+              </div>
+            ) : (
+              <span className="fo-vs">vs.</span>
+            )}
           </div>
-          <Card
-            card={rightCard}
-            size="active"
-            revealed={rightRevealed}
-            displayedValue={displayedValue}
-            category={category}
-            metric={metric}
-            isRight
-          />
+          <div className={`fo-active-wrapper${phase === 'wrong' ? ' fo-wrong-shift-right' : ''}`}>
+            <Card
+              card={rightCard}
+              size="active"
+              revealed={rightRevealed}
+              displayedValue={displayedValue}
+              category={category}
+              metric={metric}
+              isRight
+            />
+          </div>
           <Card card={nextCard} size="side" revealed={false} category={category} metric={metric} />
         </div>
         </div>
