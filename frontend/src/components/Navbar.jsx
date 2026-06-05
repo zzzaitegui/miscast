@@ -45,6 +45,7 @@ export default function Navbar() {
 
   // Clear history flash when navigating away from auth pages
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (location.pathname !== '/login' && location.pathname !== '/register') setHistoryFlash(false)
   }, [location.pathname])
 
