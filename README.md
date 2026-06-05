@@ -1,5 +1,7 @@
 # Miscast
 
+![CI](https://github.com/zzzaitegui/miscast/actions/workflows/ci.yml/badge.svg)
+
 A film rating game built on top of TMDB data. You're shown a real film with its cast and crew. Swap people in or out of the roster and a predicted rating updates in real time based on each person's historical track record in that role. Depending on the mode, you're trying to hit a target rating in as few swaps as possible, comparing films and people, or just exploring.
 
 ---
@@ -110,8 +112,8 @@ The backend depends on the database being healthy before starting. The frontend 
 | 0-90s | Spring Boot starts, HTTP server up, DB schema created |
 | ~90s | Backend healthcheck passes (`/api/films` → 200 OK) |
 | ~90s | Nginx starts, app is live at `http://localhost` |
-| 90s - ~20min | DataLoader running in background, game data loading |
-| ~20min+ | DataLoader done, app fully functional |
+| 90s - ~2h | DataLoader running in background, fetching ~1,500-2,000 films and ~20,000 persons from TMDB |
+| ~2h+ | DataLoader done, app fully functional |
 
 ### Running locally without Docker
 
