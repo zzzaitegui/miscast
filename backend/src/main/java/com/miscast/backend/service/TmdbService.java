@@ -100,9 +100,9 @@ public class TmdbService {
 
     public DiscoverPage discoverFilms(int page) {
         String url = "/discover/movie?api_key=" + apiKey
-            + "&primary_release_date.gte=2010-01-01"
-            + "&primary_release_date.lte=2020-12-31"
-            + "&vote_count.gte=1000"
+            + "&primary_release_date.gte=1995-01-01"
+            + "&primary_release_date.lte=2025-12-31"
+            + "&vote_count.gte=3000"
             + "&sort_by=popularity.desc"
             + "&page=" + page;
         try {

@@ -55,7 +55,7 @@ miscast/
 
 Films and people are loaded from TMDB at startup by `DataLoader.java`, which implements Spring Boot's `CommandLineRunner`. It runs after the HTTP server starts and is fully idempotent, it checks `filmRepository.count() > 0` on boot and skips everything if data already exists, so restarts are instant.
 
-**Films**: fetched from TMDB's discover endpoint filtered to 2010-2020 with at least 1,000 votes. Films with no director credit or no poster are excluded. Current dataset: ~300 films.
+**Films**: fetched from TMDB's discover endpoint filtered to 1995-2025 with at least 3,000 votes, sorted by popularity. Films with no director credit or no poster are excluded. Dataset: ~1,500-2,000 films covering recognisable titles from the last 30 years.
 
 **People**: for each unique person across all loaded films, their full `movie_credits` are fetched from TMDB. Credits are filtered to the five roles the game uses (director, actor, writer, DoP, composer) and a per-role rating is computed and stored on the Person entity. This is the slow part of the initial load.
 
