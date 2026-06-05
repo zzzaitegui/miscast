@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
@@ -20,8 +20,13 @@ export default function Navbar() {
   const isFaceoffActive = location.pathname.startsWith('/faceoff')
 
   const linksRef = useRef(null)
+  const historyLinkRef = useRef(null)
+  const flashTimerRef = useRef(null)
   const [indicator, setIndicator] = useState({ left: 0, width: 0, bottom: 0 })
   const [ready, setReady] = useState(false)
+  const [historyFlash, setHistoryFlash] = useState(false)
+  const [flashIndicator, setFlashIndicator] = useState({ left: 0, width: 0, bottom: 0 })
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   useEffect(() => {
     const el = linksRef.current
@@ -38,13 +43,45 @@ export default function Navbar() {
     setReady(true)
   }, [location.pathname])
 
+  // Clear history flash when navigating away from auth pages
+  useEffect(() => {
+    if (location.pathname !== '/login' && location.pathname !== '/register') setHistoryFlash(false)
+  }, [location.pathname])
+
+  // Clean up flash timer on unmount
+  useEffect(() => () => clearTimeout(flashTimerRef.current), [])
+
+  const handleHistoryClick = useCallback((e) => {
+    if (isAuthenticated) return
+    e.preventDefault()
+    if (historyLinkRef.current && linksRef.current) {
+      const cr = linksRef.current.getBoundingClientRect()
+      const lr = historyLinkRef.current.getBoundingClientRect()
+      setFlashIndicator({
+        left: lr.left - cr.left + 2,
+        width: lr.width - 4,
+        bottom: cr.bottom - lr.bottom,
+      })
+    }
+    setHistoryFlash(true)
+    clearTimeout(flashTimerRef.current)
+    flashTimerRef.current = setTimeout(() => {
+      navigate('/login', { state: { fromHistory: true } })
+    }, 700)
+  }, [isAuthenticated, navigate])
+
   function handleProfileClick() {
     if (isAuthenticated) {
-      logout()
-      navigate('/')
+      setShowLogoutConfirm(true)
     } else {
       navigate('/login')
     }
+  }
+
+  function confirmLogout() {
+    setShowLogoutConfirm(false)
+    logout()
+    navigate('/')
   }
 
   return (
@@ -63,7 +100,17 @@ export default function Navbar() {
         <NavLink to="/faceoff" className={() => 'nav-link' + (isFaceoffActive ? ' active' : '')}>
           faceoff
         </NavLink>
-        <NavLink to="/history" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+        <NavLink
+          to="/history"
+          ref={historyLinkRef}
+          className={({ isActive }) =>
+            'nav-link' +
+            (isActive ? ' active' : '') +
+            (!isAuthenticated ? ' nav-link-guest' : '') +
+            (historyFlash ? ' nav-link-flash' : '')
+          }
+          onClick={handleHistoryClick}
+        >
           history
         </NavLink>
         <NavLink to="/leaderboard" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
@@ -71,15 +118,35 @@ export default function Navbar() {
         </NavLink>
         <div
           className={`nav-indicator${ready ? ' ready' : ''}`}
-          style={{ left: indicator.left, width: indicator.width, bottom: indicator.bottom }}
+          style={{ left: indicator.left, width: indicator.width, bottom: indicator.bottom, opacity: historyFlash ? 0 : 1 }}
         />
+        {historyFlash && (
+          <div
+            className="nav-indicator nav-indicator-flash"
+            style={{ left: flashIndicator.left, width: flashIndicator.width, bottom: flashIndicator.bottom }}
+          />
+        )}
       </div>
-      <button
-        className={`nav-profile${isAuthenticated ? ' authenticated' : ''}`}
-        onClick={handleProfileClick}
-      >
-        <PersonIcon />
-      </button>
+      <div className="nav-profile-wrapper">
+        <button
+          className={`nav-profile${isAuthenticated ? ' authenticated' : ''}`}
+          onClick={handleProfileClick}
+        >
+          <PersonIcon />
+        </button>
+        {showLogoutConfirm && (
+          <>
+            <div className="logout-backdrop" onClick={() => setShowLogoutConfirm(false)} />
+            <div className="logout-popover">
+              <p className="logout-popover-title">Log out?</p>
+              <div className="logout-popover-actions">
+                <button className="logout-popover-cancel" onClick={() => setShowLogoutConfirm(false)}>Cancel</button>
+                <button className="logout-popover-confirm" onClick={confirmLogout}>Log out</button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </nav>
   )
 }

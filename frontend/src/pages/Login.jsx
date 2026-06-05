@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { login as loginApi } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
@@ -22,6 +22,8 @@ export default function Login() {
   const [loading, setLoading]   = useState(false)
   const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromHistory = location.state?.fromHistory === true
 
   if (isAuthenticated) return <Navigate to="/" replace />
 
@@ -43,6 +45,9 @@ export default function Login() {
 
   return (
     <div className="auth-page">
+      {fromHistory && (
+        <p className="auth-history-hint">You must be logged in to save and view your history.</p>
+      )}
       <div className="auth-card">
         <div className="auth-header">
           <span style={{ color: 'var(--text)', display: 'flex' }}><LoginIcon /></span>
@@ -83,7 +88,7 @@ export default function Login() {
         </form>
 
         <p className="auth-switch">
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register" state={fromHistory ? { fromHistory: true } : undefined}>Register</Link>
         </p>
       </div>
     </div>

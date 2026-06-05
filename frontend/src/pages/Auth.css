@@ -5,6 +5,17 @@
   align-items: center;
   justify-content: center;
   padding: 40px 24px;
+  gap: 20px;
+}
+
+.auth-history-hint {
+  width: min(420px, 100%);
+  font-size: 15px;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.5;
+  display: inline-block;
+  transform: scaleY(0.93);
 }
 
 /* Card */
@@ -82,6 +93,40 @@
   color: var(--text-active);
   outline: none;
   transition: border-color 0.15s;
+}
+
+/* Suppress native browser password reveal button */
+.auth-input::-ms-reveal,
+.auth-input::-ms-clear {
+  display: none;
+}
+
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-with-toggle {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.auth-eye {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-hint);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.auth-eye:hover {
+  color: var(--text);
 }
 
 .auth-input:focus {

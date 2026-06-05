@@ -4,6 +4,12 @@ const api = axios.create({
   baseURL: '/api',
 })
 
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('jwt')
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+
 api.interceptors.response.use(
   r => r,
   err => {
@@ -17,10 +23,6 @@ api.interceptors.response.use(
     return Promise.reject(err)
   }
 )
-
-function authHeader(token) {
-  return { Authorization: `Bearer ${token}` }
-}
 
 // Films
 export const getFilms = (page = 0, size = 20) =>
@@ -65,9 +67,9 @@ export const getFaceoffMovies = () =>
 export const getFaceoffPersons = () =>
   api.get('/faceoff/persons').then(r => r.data)
 
-// Matches (protected)
-export const getMatches = (token) =>
-  api.get('/matches', { headers: authHeader(token) }).then(r => r.data)
+// Matches (protected — token attached automatically by request interceptor)
+export const getMatches = () =>
+  api.get('/matches').then(r => r.data)
 
-export const saveMatch = (data, token) =>
-  api.post('/matches', data, { headers: authHeader(token) }).then(r => r.data)
+export const saveMatch = (data) =>
+  api.post('/matches', data).then(r => r.data)

@@ -237,7 +237,7 @@ export default function Game() {
         swapsUsed,
         won: isDaily ? didWin : false,
         mode: isDaily ? 'daily' : 'sandbox',
-      }, token).catch(() => {})
+      }).catch(() => {})
     }
 
     setTimeout(() => navigate('/'), 3000)

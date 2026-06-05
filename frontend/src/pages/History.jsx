@@ -123,14 +123,12 @@ export default function History() {
   const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const { token } = useAuth()
-
   useEffect(() => {
-    getMatches(token)
+    getMatches()
       .then(data => { setMatches(data); setError(false) })
       .catch(() => setError(true))
       .finally(() => setLoading(false))
-  }, [token])
+  }, [])
 
   return (
     <div className="history-page">
