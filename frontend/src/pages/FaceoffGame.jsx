@@ -207,6 +207,7 @@ export default function FaceoffGame() {
   }, [category])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPool()
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   }, [loadPool])

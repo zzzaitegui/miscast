@@ -35,7 +35,7 @@ export default function SwapModal({ role, currentPerson, onSwap, onClose, occupi
   }, [])
 
   useEffect(() => {
-    if (!query.trim()) { setResults([]); return }
+    if (!query.trim()) return
     const timer = setTimeout(async () => {
       setSearching(true)
       try {
@@ -49,6 +49,8 @@ export default function SwapModal({ role, currentPerson, onSwap, onClose, occupi
     }, 300)
     return () => clearTimeout(timer)
   }, [query, role])
+
+  const visibleResults = query.trim() ? results : []
 
   useEffect(() => {
     function onKey(e) { if (e.key === 'Escape') onClose() }
@@ -96,13 +98,13 @@ export default function SwapModal({ role, currentPerson, onSwap, onClose, occupi
           {searching && (
             <p className="modal-status">Searching...</p>
           )}
-          {!searching && query.trim() && results.length === 0 && (
+          {!searching && query.trim() && visibleResults.length === 0 && (
             <p className="modal-status">No results found.</p>
           )}
           {!searching && !query.trim() && (
             <p className="modal-status">Type a name to search.</p>
           )}
-          {results.filter(person => !occupiedPersonIds.has(person.id)).map(person => {
+          {visibleResults.filter(person => !occupiedPersonIds.has(person.id)).map(person => {
             const rating = getRoleRating(person, role)
             const photoUrl = person.profilePath
               ? `https://image.tmdb.org/t/p/w185${person.profilePath}`
