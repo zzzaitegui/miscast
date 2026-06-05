@@ -282,7 +282,7 @@ export default function FaceoffGame() {
               faceoffLeftLabel: capturedLeft?.name ?? capturedLeft?.title,
               faceoffRightLabel: capturedRight?.name ?? capturedRight?.title,
               faceoffMetric,
-            }, token).catch(() => {})
+            }).catch(() => {})
           }
         }, 1000)
       }
