@@ -1,8 +1,12 @@
 package com.miscast.backend.service;
 
-import com.miscast.backend.entity.Genre;
-import com.miscast.backend.entity.Person;
-import com.miscast.backend.repository.FilmRepository;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +14,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import com.miscast.backend.entity.Genre;
+import com.miscast.backend.entity.Person;
+import com.miscast.backend.repository.FilmRepository;
 
 @Component
 @Order(1)
@@ -63,9 +69,9 @@ public class DataLoader implements CommandLineRunner {
         List<FilmPersonData> filmPersonDataList = new ArrayList<>();
         Map<Long, Genre> genreMap = new LinkedHashMap<>();
 
-        // Phase 1 — fetch films from TMDB discover
+        // Phase 1, fetch films from TMDB discover
         int page = 1;
-        int maxPages = 15;
+        int maxPages = 500; // auto-capped by discoverPage.totalPages() on first response
 
         while (page <= maxPages) {
             Thread.sleep(API_DELAY_MS);
@@ -112,15 +118,15 @@ public class DataLoader implements CommandLineRunner {
 
         log.info("Fetched {} films and {} unique persons", filmDataMap.size(), personDataMap.size());
 
-        // Phase 2 — persist genres
+        // Phase 2, persist genres
         persistenceService.saveGenres(genreMap.values());
         log.info("Saved {} genres", genreMap.size());
 
-        // Phase 3 — persist films
+        // Phase 3, persist films
         persistenceService.saveFilms(new ArrayList<>(filmDataMap.values()), genreMap);
         log.info("Saved {} films", filmDataMap.size());
 
-        // Phase 4 — fetch person ratings and persist
+        // Phase 4, fetch person ratings and persist
         int processed = 0;
         List<Person> personBatch = new ArrayList<>();
 
@@ -143,7 +149,7 @@ public class DataLoader implements CommandLineRunner {
         }
         log.info("Saved {} persons", processed);
 
-        // Phase 5 — persist film-person relationships (only for saved films+persons)
+        // Phase 5, persist film-person relationships (only for saved films+persons)
         List<FilmPersonData> validLinks = filmPersonDataList.stream()
             .filter(fpd -> filmDataMap.containsKey(fpd.filmId()) && personDataMap.containsKey(fpd.personId()))
             .toList();
@@ -159,7 +165,7 @@ public class DataLoader implements CommandLineRunner {
         Long filmId = detail.id();
         TmdbService.TmdbCredits credits = detail.credits();
 
-        // Cast — order < 30, deduplicate by person id within film
+        // Cast, order < 30, deduplicate by person id within film
         Set<Long> actorsSeen = new HashSet<>();
         if (credits.cast() != null) {
             for (var cast : credits.cast()) {
@@ -170,7 +176,7 @@ public class DataLoader implements CommandLineRunner {
             }
         }
 
-        // Crew — deduplicate by (person id, role) within film
+        // Crew, deduplicate by (person id, role) within film
         Set<String> crewKeys = new HashSet<>();
         if (credits.crew() != null) {
             for (var crew : credits.crew()) {
@@ -192,7 +198,7 @@ public class DataLoader implements CommandLineRunner {
 
         if (credits == null) return person;
 
-        // Actor rating — cast, order < 30, vote_count > MIN_VOTE_COUNT, dedup by film id
+        // Actor rating, cast, order < 30, vote_count > MIN_VOTE_COUNT, dedup by film id
         if (credits.cast() != null) {
             Map<Long, TmdbService.PersonCreditCast> actorCredits = new LinkedHashMap<>();
             for (var c : credits.cast()) {
