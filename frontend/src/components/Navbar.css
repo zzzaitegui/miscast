@@ -45,7 +45,7 @@
 }
 
 .nav-indicator.ready {
-  transition: left 0.28s ease, width 0.28s ease;
+  transition: left 0.28s ease, width 0.28s ease, opacity 0.2s ease;
 }
 
 .nav-profile {
@@ -63,6 +63,91 @@
 .nav-profile.active,
 .nav-profile.authenticated {
   color: var(--text-active);
+}
+
+/* History link — guest state */
+.nav-link.nav-link-guest {
+  color: var(--text-hint);
+}
+
+.nav-link.nav-link-flash {
+  color: #b04040;
+}
+
+/* Flash indicator — red, no slide transition */
+.nav-indicator-flash {
+  background: #b04040;
+  transition: none;
+}
+
+/* Logout popover */
+.nav-profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.logout-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.logout-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 100;
+  background: #111010;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+}
+
+.logout-popover-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-active);
+  display: inline-block;
+  transform: scaleY(0.93);
+}
+
+.logout-popover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.logout-popover-cancel,
+.logout-popover-confirm {
+  flex: 1;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.logout-popover-cancel {
+  background: var(--border);
+  color: var(--text);
+}
+
+.logout-popover-confirm {
+  background: #b04040;
+  color: #fff;
+}
+
+.logout-popover-cancel:hover,
+.logout-popover-confirm:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 900px) {
