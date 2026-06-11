@@ -172,7 +172,9 @@ public class DataLoader implements CommandLineRunner {
                 if (cast.order() >= ACTOR_ORDER_CUTOFF) continue;
                 if (!actorsSeen.add(cast.id())) continue;
                 personDataMap.putIfAbsent(cast.id(), new PersonData(cast.id(), cast.name(), cast.profilePath()));
-                filmPersonDataList.add(new FilmPersonData(filmId, cast.id(), "actor", cast.character(), cast.order()));
+                String charName = cast.character() != null && cast.character().length() > 1000
+                        ? cast.character().substring(0, 1000) : cast.character();
+                filmPersonDataList.add(new FilmPersonData(filmId, cast.id(), "actor", charName, cast.order()));
             }
         }
 

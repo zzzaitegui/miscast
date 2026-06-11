@@ -21,6 +21,7 @@ public class FilmPerson {
     @Column(nullable = false)
     private String role;
 
+    @Column(columnDefinition = "TEXT")
     private String character;
 
     private int billingOrder;
